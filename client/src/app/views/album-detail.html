@@ -1,0 +1,59 @@
+<div class="album-box" *ngIf="album">
+
+    <div id="album-head-card">
+        <div class="image">
+            <img src="{{ url + 'get-image-album/' + album.image }}">
+        </div>
+
+        <div class="data">
+            <h1>{{album.title}}</h1>
+            <p><strong>{{album.artist.name}}</strong></p>
+            <p>{{album.year}}</p>
+            <p>{{album.description}}</p>
+
+            <!-- pongo una '/' para que el enlace lo tome desde la raíz y no dende donde estamos -->
+            <a [routerLink]="['/crear-cancion', album._id]" class="btn btn-default" *ngIf="identity.role == 'ROLE_ADMIN'"> 
+                Añadir canción
+            </a>
+        </div>
+    
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div id="gallery-songs" *ngIf="songs">
+        <ul id="songs-list">
+            <li *ngFor="let song of songs" class="song-item">
+                <div class="title">
+                    <a class="btn btn-success" (click)="startPlayer(song)">
+                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    </a>
+
+                    {{song.number + '. ' + song.name + ' - ' + song.duration}}
+
+                    <div class="buttons" *ngIf="identity && identity.role == 'ROLE_ADMIN'">
+                        <a [routerLink]="['/editar-cancion', song._id]" class="btn btn-warning">
+                            Editar
+                        </a>
+                        <a (click)="onDeleteConfirm(song._id)" class="btn btn-danger">
+                            Borrar
+                        </a>
+                    </div>
+
+                    <div class="seguro seguro-song" *ngIf="confirmado == song._id">
+                        <a (click)="onDeleteSong(song._id)" class="btn btn-danger">
+                            Eliminar
+                        </a>
+                        <a (click)="onCancelSong()" class="btn btn-primary">
+                            Cancelar
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
